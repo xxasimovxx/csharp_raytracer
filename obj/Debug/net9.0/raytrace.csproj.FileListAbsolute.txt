@@ -1,0 +1,14 @@
+/home/xxasimovxx/Desktop/raytrace/obj/Debug/net9.0/raytrace.GeneratedMSBuildEditorConfig.editorconfig
+/home/xxasimovxx/Desktop/raytrace/obj/Debug/net9.0/raytrace.AssemblyInfoInputs.cache
+/home/xxasimovxx/Desktop/raytrace/obj/Debug/net9.0/raytrace.AssemblyInfo.cs
+/home/xxasimovxx/Desktop/raytrace/obj/Debug/net9.0/raytrace.csproj.CoreCompileInputs.cache
+/home/xxasimovxx/Desktop/raytrace/bin/Debug/net9.0/raytrace
+/home/xxasimovxx/Desktop/raytrace/bin/Debug/net9.0/raytrace.deps.json
+/home/xxasimovxx/Desktop/raytrace/bin/Debug/net9.0/raytrace.runtimeconfig.json
+/home/xxasimovxx/Desktop/raytrace/bin/Debug/net9.0/raytrace.dll
+/home/xxasimovxx/Desktop/raytrace/bin/Debug/net9.0/raytrace.pdb
+/home/xxasimovxx/Desktop/raytrace/obj/Debug/net9.0/raytrace.dll
+/home/xxasimovxx/Desktop/raytrace/obj/Debug/net9.0/refint/raytrace.dll
+/home/xxasimovxx/Desktop/raytrace/obj/Debug/net9.0/raytrace.pdb
+/home/xxasimovxx/Desktop/raytrace/obj/Debug/net9.0/raytrace.genruntimeconfig.cache
+/home/xxasimovxx/Desktop/raytrace/obj/Debug/net9.0/ref/raytrace.dll
