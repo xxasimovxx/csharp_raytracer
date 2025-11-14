@@ -20,7 +20,7 @@ namespace Raytracing
 
             double focal_length = 1.0;
             double viewport_height = 2.0;
-            double viewport_width = viewport_height * (double)(image_width / image_height);
+            double viewport_width = viewport_height * aspect_ratio;
             Vec3 camera_center = new Vec3(0, 0, 0);
 
             // Calculate the vectors across the horizontal and down the vertical viewport edges.
@@ -38,8 +38,8 @@ namespace Raytracing
 
             // Render
             using FileStream fs = File.OpenWrite("image.ppm");
-            if(!fs.CanWrite)
-              throw new FileNotFoundException("Cannot write to file!");
+            if (!fs.CanWrite)
+                throw new FileNotFoundException("Cannot write to file!");
             using StreamWriter sw = new StreamWriter(fs);
             sw.Write("P3\n{0} {1}\n255\n", image_width, image_height);
 
@@ -61,8 +61,11 @@ namespace Raytracing
 
         private static Vec3 RayColor(Ray ray)
         {
+            Vec3 point = new Vec3(0, 0, -1);
+            if (point.HitSphere(0.5, ray))
+                return new Vec3(1, 0, 0);
 
-            Vec3 unit_direction = ray.direction.UnitVec();
+            Vec3 unit_direction = ray.Direction.UnitVec();
             double a = 0.5 * (unit_direction.Y + 1.0);
             Vec3 color = new Vec3(0.5, 0.7, 1.0);
             Vec3 v = new Vec3(1.0, 1.0, 1.0);

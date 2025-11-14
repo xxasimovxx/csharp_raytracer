@@ -1,3 +1,4 @@
+using Rays;
 namespace VecMath
 {
     public class Vec3
@@ -93,6 +94,16 @@ namespace VecMath
         {
 
             return new Vec3(v.X - scalar, v.Y - scalar, v.Z - scalar);
+
+        }
+
+        public bool HitSphere(double Radius, Ray ray){
+          Vec3 Oc = this - ray.Origin;
+          var a = VecOperation.Dot(ray.Direction, ray.Direction);
+          var b = -2.0 * VecOperation.Dot(ray.Direction, Oc);
+          var c = VecOperation.Dot(Oc, Oc) - Radius * Radius;
+          var dicriminant = b*b -4*a*c;
+          return dicriminant >= 0;
 
         }
 

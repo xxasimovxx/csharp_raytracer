@@ -3,7 +3,7 @@ namespace Rays
 {
     public class Ray
     {
-        public Vec3 origin
+        public Vec3 Origin
         {
 
             get;
@@ -11,7 +11,7 @@ namespace Rays
 
         }
 
-        public Vec3 direction
+        public Vec3 Direction
         {
 
             get;
@@ -22,15 +22,15 @@ namespace Rays
         public Ray(Vec3 origin, Vec3 direction)
         {
 
-            this.origin = origin;
-            this.direction = direction;
+            this.Origin = origin;
+            this.Direction = direction;
 
         }
 
         public Vec3 At(double t)
         {
 
-            return origin + direction * t;
+            return Origin + Direction * t;
 
         }
 
