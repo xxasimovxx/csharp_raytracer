@@ -1,4 +1,4 @@
-namespace Math
+namespace VecMath
 {
     public class Vec3
     {
@@ -22,7 +22,7 @@ namespace Math
         {
             X = x;
             Y = y;
-            X = z;
+            Z = z;
 
         }
 
@@ -43,14 +43,14 @@ namespace Math
         public static Vec3 operator -(Vec3 v)
         {
 
-            return new Vec3(-v.X, -v.Y, -v.X);
+            return new Vec3(-v.X, -v.Y, -v.Z);
 
         }
 
         public static Vec3 operator -(Vec3 v, Vec3 u)
         {
 
-            return new Vec3(v.X - u.X, v.Y - u.Y, v.X - u.Z);
+            return new Vec3(v.X - u.X, v.Y - u.Y, v.Z - u.Z);
 
         }
 
@@ -100,7 +100,7 @@ namespace Math
         {
 
             var sb = new System.Text.StringBuilder();
-            sb.AppendFormat("{0} {1} {2}\n", X, Y, Z);
+            sb.AppendFormat("{0} {1} {2}", X, Y, Z);
             return sb.ToString();
 
         }
@@ -112,7 +112,15 @@ namespace Math
     {
         public static double Dot(Vec3 v, Vec3 u)
         {
-            return 0f;
+
+            return v.X * u.X + v.Y * u.Y + v.Z * u.Z;
+
+        }
+
+        public static Vec3 Cross(Vec3 v, Vec3 u)
+        {
+
+            return new Vec3(v.Y * u.Z - v.Z * u.Y, v.Z * u.X - v.X * u.Z, v.X * u.Y - v.Y * u.X);
 
         }
 
