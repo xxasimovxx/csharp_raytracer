@@ -37,8 +37,11 @@ namespace Raytracing
             Vec3 pixel00_loc = viewport_upper_left + (pixel_delta_u + pixel_delta_v) * 0.5;
 
             // Render
-
-            Console.Write("P3\n{0} {1}\n255\n", image_width, image_height);
+            using FileStream fs = File.OpenWrite("image.ppm");
+            if(!fs.CanWrite)
+              throw new FileNotFoundException("Cannot write to file!");
+            using StreamWriter sw = new StreamWriter(fs);
+            sw.Write("P3\n{0} {1}\n255\n", image_width, image_height);
 
             for (int i = 0; i < image_height; i++)
             {
@@ -49,10 +52,11 @@ namespace Raytracing
                     Ray r = new Ray(camera_center, ray_direction);
 
                     Vec3 pixel_color = RayColor(r);
-                    Color.WriteColor(pixel_color, Console.Out);
+                    Color.WriteColor(pixel_color, sw);
 
                 }
             }
+            Console.WriteLine("Successfully created file image.ppm!");
         }
 
         private static Vec3 RayColor(Ray ray)
