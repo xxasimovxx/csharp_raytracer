@@ -1,7 +1,7 @@
 using Rays;
 namespace VecMath
 {
-    public class Vec3
+    public struct Vec3
     {
         public double X
         {
@@ -31,6 +31,12 @@ namespace VecMath
         {
 
             return System.Math.Sqrt(X * X + Y * Y + Z * Z);
+
+        }
+
+        public double LengthSquared()
+        {
+            return (X * X + Y * Y + Z * Z) * (X * X + Y * Y + Z * Z);
 
         }
 
@@ -97,17 +103,28 @@ namespace VecMath
 
         }
 
-        public double HitSphere(double Radius, Ray ray)
+
+        // temporary function just to test things out
+        public double HitSphere(double radius, Ray ray)
         {
-            Vec3 Oc = this - ray.Origin;
-            var a = VecOperation.Dot(ray.Direction, ray.Direction);
-            var b = -2.0 * VecOperation.Dot(ray.Direction, Oc);
-            var c = VecOperation.Dot(Oc, Oc) - Radius * Radius;
-            var discriminant = b * b - 4 * a * c;
+            Vec3 center = this - ray.Origin;
+            double a = ray.Direction.LengthSquared();
+            double h = Dot(ray.Direction, center);
+            double c = center.LengthSquared() - radius * radius;
+            double discriminant = h * h - a * c;
             if (discriminant < 0)
                 return -1.0;
-            return (-b - Math.Sqrt(discriminant)) / (2.0 * a);
+            return (h - Math.Sqrt(discriminant)) / a;
 
+        }
+        public static double Dot(Vec3 v, Vec3 u)
+        {
+            return v.X * u.X + v.Y * u.Y + v.Z * u.Z;
+        }
+
+        public static Vec3 Cross(Vec3 v, Vec3 u)
+        {
+            return new Vec3(v.Y * u.Z - v.Z * u.Y, v.Z * u.X - v.X * u.Z, v.X * u.Y - v.Y * u.X);
         }
 
         public override string ToString()
@@ -118,25 +135,5 @@ namespace VecMath
             return sb.ToString();
 
         }
-
-
-    }
-
-    public static class VecOperation
-    {
-        public static double Dot(Vec3 v, Vec3 u)
-        {
-
-            return v.X * u.X + v.Y * u.Y + v.Z * u.Z;
-
-        }
-
-        public static Vec3 Cross(Vec3 v, Vec3 u)
-        {
-
-            return new Vec3(v.Y * u.Z - v.Z * u.Y, v.Z * u.X - v.X * u.Z, v.X * u.Y - v.Y * u.X);
-
-        }
-
     }
 }
