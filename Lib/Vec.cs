@@ -97,13 +97,16 @@ namespace VecMath
 
         }
 
-        public bool HitSphere(double Radius, Ray ray){
-          Vec3 Oc = this - ray.Origin;
-          var a = VecOperation.Dot(ray.Direction, ray.Direction);
-          var b = -2.0 * VecOperation.Dot(ray.Direction, Oc);
-          var c = VecOperation.Dot(Oc, Oc) - Radius * Radius;
-          var dicriminant = b*b -4*a*c;
-          return dicriminant >= 0;
+        public double HitSphere(double Radius, Ray ray)
+        {
+            Vec3 Oc = this - ray.Origin;
+            var a = VecOperation.Dot(ray.Direction, ray.Direction);
+            var b = -2.0 * VecOperation.Dot(ray.Direction, Oc);
+            var c = VecOperation.Dot(Oc, Oc) - Radius * Radius;
+            var discriminant = b * b - 4 * a * c;
+            if (discriminant < 0)
+                return -1.0;
+            return (-b - Math.Sqrt(discriminant)) / (2.0 * a);
 
         }
 

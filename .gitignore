@@ -1,3 +1,4 @@
 *.ppm
 /obj
 /bin
+/images
