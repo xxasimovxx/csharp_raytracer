@@ -18,7 +18,7 @@ namespace HittableObjects
 
     public interface IHittable
     {
-        public bool Hit(ref Ray ray, double rayTmin, double rayTmax, out HitRecord rec);
+        public bool Hit(ref Ray ray, Interval interval, out HitRecord rec);
     }
 
     public class HittableList : IHittable
@@ -40,15 +40,15 @@ namespace HittableObjects
             HList.Add(HObject);
         }
 
-        public bool Hit(ref Ray ray, double rayTmin, double rayTmax, out HitRecord rec)
+        public bool Hit(ref Ray ray, Interval interval, out HitRecord rec)
         {
             rec = default;
             bool hitAnything = false;
-            double closestSoFar = rayTmax;
+            double closestSoFar = interval.Max;
 
             foreach (var HObject in HList)
             {
-                if (HObject.Hit(ref ray, rayTmin, closestSoFar, out HitRecord tempHitRecord))
+                if (HObject.Hit(ref ray, new Interval(interval.Min, closestSoFar), out HitRecord tempHitRecord))
                 {
                     hitAnything = true;
                     closestSoFar = tempHitRecord.T;
@@ -71,7 +71,7 @@ namespace HittableObjects
             Radius = radius;
         }
 
-        public bool Hit(ref Ray ray, double rayTmin, double rayTmax, out HitRecord rec)
+        public bool Hit(ref Ray ray, Interval interval, out HitRecord rec)
         {
             Vec3 oc = Center - ray.Origin;
             var a = ray.Direction.LengthSquared();
@@ -89,10 +89,10 @@ namespace HittableObjects
             var sqrtd = Math.Sqrt(discriminant);
 
             var root = (h - sqrtd) / a;
-            if (root <= rayTmin || rayTmax <= root)
+            if (root <= interval.Min || interval.Max <= root)
             {
                 root = (h + sqrtd) / a;
-                if (root <= rayTmin || rayTmax <= root)
+                if (root <= interval.Min ||  interval.Max<= root)
                 {
                     rec = default;
                     return false;
