@@ -36,7 +36,7 @@ namespace VecMath
 
         public double LengthSquared()
         {
-            return (X * X + Y * Y + Z * Z) * (X * X + Y * Y + Z * Z);
+            return X * X + Y * Y + Z * Z;
 
         }
 

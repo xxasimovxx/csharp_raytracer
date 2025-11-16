@@ -1,7 +1,4 @@
 using VecMath;
-using System;
-using System.IO;
-
 namespace Colors
 {
     public static class Color

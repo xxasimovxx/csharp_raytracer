@@ -20,7 +20,6 @@ namespace Raytracing
             ImageHeight = (ImageHeight < 1) ? 1 : ImageHeight;
 
             // Camera
-
             double focal_length = 1.0;
             double viewport_height = 2.0;
             double viewport_width = viewport_height * aspect_ratio;
@@ -39,5 +38,4 @@ namespace Raytracing
             Pixel00Loc = viewport_upper_left + (PixelDeltaU + PixelDeltaV) * 0.5;
         }
     }
-
 }

@@ -1,12 +1,16 @@
 ﻿using Colors;
 using Rays;
 using VecMath;
+using HittableObjects;
 namespace Raytracing
 {
     public class Raytracer
     {
         static void Main(string[] args)
         {
+            HittableList world = new HittableList();
+            world.Add(new Sphere(new Vec3(0,-100.5,-1), 100));
+            world.Add(new Sphere(new Vec3(0,0,-1), 0.5));
             Camera camera = new Camera(16.0 / 9.0, 400);
 
             // Render
@@ -20,9 +24,9 @@ namespace Raytracing
                 {
                     Vec3 pixel_center = camera.Pixel00Loc + (camera.PixelDeltaU * j) + (camera.PixelDeltaV * i);
                     Vec3 ray_direction = pixel_center - camera.CameraCenter;
-                    Ray r = new Ray(camera.CameraCenter, ray_direction);
+                    Ray ray = new Ray(camera.CameraCenter, ray_direction);
 
-                    Vec3 pixel_color = RayColor(r);
+                    Vec3 pixel_color = RayColor(ray, world);
                     Color.WriteColor(pixel_color, sw);
 
                 }
@@ -30,15 +34,12 @@ namespace Raytracing
             Console.WriteLine("Successfully created file image.ppm!");
         }
 
-        private static Vec3 RayColor(Ray ray)
+        private static Vec3 RayColor(Ray ray, IHittable world)
         {
-            Vec3 point = new Vec3(0, 0, -1);
-            double hs = point.HitSphere(0.5, ray);
-
-            if (hs > 0.0)
+            HitRecord rec;
+            if (world.Hit(ref ray, 0, double.PositiveInfinity, out rec))
             {
-                Vec3 uv = (ray.At(hs) - new Vec3(0, 0, -1)).UnitVec();
-                return (new Vec3(uv.X + 1, uv.Y + 1, uv.Z + 1)) * 0.5;
+                return (rec.Normal + new Vec3(1, 1, 1)) * 0.5;
 
             }
 
