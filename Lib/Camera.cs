@@ -13,6 +13,9 @@ namespace Raytracing
         public Vec3 CameraCenter { get; } = new Vec3(0, 0, 0);
         public Vec3 PixelDeltaU { get; }
         public Vec3 PixelDeltaV { get; }
+        public int SamplesPerPixel { get; set;} = 100;
+        private Random random = new Random();
+        private double PixelSampleScale { get; set;}
 
         public Camera()
         {
@@ -36,6 +39,7 @@ namespace Raytracing
 
         public void Render(IHittable world)
         {
+            PixelSampleScale = 1.0 / SamplesPerPixel;
             using FileStream fs = File.OpenWrite("image.ppm");
             using StreamWriter sw = new StreamWriter(fs);
             sw.WriteLine($"P3\n{ImageWidth} {ImageHeight}\n255");
@@ -44,19 +48,21 @@ namespace Raytracing
             {
                 for (int j = 0; j < ImageWidth; j++)
                 {
-                    Vec3 pixel_center = Pixel00Loc + (PixelDeltaU * j) + (PixelDeltaV * i);
-                    Vec3 ray_direction = pixel_center - CameraCenter;
-                    Ray ray = new Ray(CameraCenter, ray_direction);
+                    Vec3 pixelColor = new Vec3(0, 0, 0);
+                    for (int sample = 0; sample < SamplesPerPixel; sample++)
+                    {
+                        Ray ray = GetRay(j, i);
+                        pixelColor += RayColor(ray, world);
+                    }
 
-                    Vec3 pixel_color = RayColor(ray, world);
-                    Color.WriteColor(pixel_color, sw);
+                    Color.WriteColor(pixelColor * PixelSampleScale, sw);
 
                 }
             }
             Console.WriteLine("Successfully created file image.ppm!");
         }
 
-        public Vec3 RayColor(Ray ray, IHittable world)
+        private Vec3 RayColor(Ray ray, IHittable world)
         {
             HitRecord rec;
             if (world.Hit(ref ray, new Interval(0, double.PositiveInfinity), out rec))
@@ -71,6 +77,19 @@ namespace Raytracing
             Vec3 v = new Vec3(1.0, 1.0, 1.0);
             return v * (1.0 - a) + color * a;
 
+        }
+
+        public Vec3 SampleSquare()
+        {
+            return new Vec3(random.NextDouble() - 0.5, random.NextDouble() - 0.5, 0);
+        }
+
+        private Ray GetRay(int i, int j)
+        {
+            var offset = SampleSquare();
+            var pixelSample = Pixel00Loc + (PixelDeltaU * (i + offset.X)) + (PixelDeltaV * (j + offset.Y));
+            var rayDirection = pixelSample - CameraCenter;
+            return new Ray(CameraCenter, rayDirection);
         }
     }
 }

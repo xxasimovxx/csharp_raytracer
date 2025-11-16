@@ -29,5 +29,14 @@ namespace Rays
         {
             return Min < x && x < Max;
         }
+
+        public Double Clamp(double x)
+        {
+            if (x < Min)
+                return Min;
+            if (x > Max)
+                return Max;
+            return x;
+        }
     }
 }
