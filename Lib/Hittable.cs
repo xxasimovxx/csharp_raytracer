@@ -7,6 +7,7 @@ namespace HittableObjects
         public Vec3 Point { get; set; }
         public Vec3 Normal { get; set; }
         public bool FrontFace { get; private set; }
+        public IMaterial Material { get; set; }
         public double T;
 
         public void SetFaceNormal(in Ray ray, in Vec3 outwardNormal)
@@ -64,11 +65,14 @@ namespace HittableObjects
     {
         public Vec3 Center { get; private set; }
         public double Radius { get; private set; }
+        private IMaterial Material {get;  set;}
 
-        public Sphere(Vec3 center, double radius)
+        public Sphere(Vec3 center, double radius, IMaterial material)
         {
             Center = center;
             Radius = radius;
+            Material = material;
+            
         }
 
         public bool Hit(ref Ray ray, Interval interval, out HitRecord rec)
@@ -92,7 +96,7 @@ namespace HittableObjects
             if (root <= interval.Min || interval.Max <= root)
             {
                 root = (h + sqrtd) / a;
-                if (root <= interval.Min ||  interval.Max<= root)
+                if (root <= interval.Min || interval.Max <= root)
                 {
                     rec = default;
                     return false;
@@ -102,6 +106,7 @@ namespace HittableObjects
             rec = new HitRecord();
 
             rec.T = root;
+            rec.Material = Material;
             rec.Point = ray.At(rec.T);
             var outwardNormal = (rec.Point - Center) / Radius;
             rec.SetFaceNormal(ray, outwardNormal);

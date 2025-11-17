@@ -70,9 +70,11 @@ namespace Raytracing
             HitRecord rec;
             if (world.Hit(ref ray, new Interval(0.001, double.PositiveInfinity), out rec))
             {
-                Vec3 direction = rec.Normal + VRandom.UnitVec3();
-                Ray r = new Ray(rec.Point, direction);
-                return RayColor(r, world, depth - 1) * 0.5;
+                Ray scattered = default;
+                Vec3 attenuation = default;
+                if (rec.Material.Scatter(ref ray, ref rec, ref attenuation, ref scattered))
+                    return attenuation * RayColor(scattered, world, depth - 1);
+                return new Vec3(0, 0, 0);
 
             }
 

@@ -137,6 +137,13 @@ namespace VecMath
             return new Vec3(v.Y * u.Z - v.Z * u.Y, v.Z * u.X - v.X * u.Z, v.X * u.Y - v.Y * u.X);
         }
 
+        public bool NearZero()
+        {
+            var s = 1e-8;
+            return (Double.Abs(X) < s && Double.Abs(Y) < s && Double.Abs(Z) < s);
+
+        }
+
         public Vec3 RandomUnitVector()
         {
             while (true)
@@ -156,6 +163,11 @@ namespace VecMath
                 return randomUnitVec;
             else
                 return -randomUnitVec;
+        }
+
+        public static Vec3 Reflect(Vec3 v, Vec3 n)
+        {
+            return v - n * Vec3.Dot(v, n) * 2.0;
         }
 
         public override string ToString()
