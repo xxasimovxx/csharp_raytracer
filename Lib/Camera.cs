@@ -13,9 +13,10 @@ namespace Raytracing
         public Vec3 CameraCenter { get; } = new Vec3(0, 0, 0);
         public Vec3 PixelDeltaU { get; }
         public Vec3 PixelDeltaV { get; }
-        public int SamplesPerPixel { get; set;} = 100;
+        public int SamplesPerPixel { get; set; } = 10;
         private Random random = new Random();
-        private double PixelSampleScale { get; set;}
+        private double PixelSampleScale { get; set; }
+        public int MaxDepth { get; set; } = 50;
 
         public Camera()
         {
@@ -52,7 +53,7 @@ namespace Raytracing
                     for (int sample = 0; sample < SamplesPerPixel; sample++)
                     {
                         Ray ray = GetRay(j, i);
-                        pixelColor += RayColor(ray, world);
+                        pixelColor += RayColor(ray, world, MaxDepth);
                     }
 
                     Color.WriteColor(pixelColor * PixelSampleScale, sw);
@@ -62,12 +63,16 @@ namespace Raytracing
             Console.WriteLine("Successfully created file image.ppm!");
         }
 
-        private Vec3 RayColor(Ray ray, IHittable world)
+        private Vec3 RayColor(Ray ray, IHittable world, int depth)
         {
+            if (depth <= 0)
+                return new Vec3(0, 0, 0);
             HitRecord rec;
-            if (world.Hit(ref ray, new Interval(0, double.PositiveInfinity), out rec))
+            if (world.Hit(ref ray, new Interval(0.001, double.PositiveInfinity), out rec))
             {
-                return (rec.Normal + new Vec3(1, 1, 1)) * 0.5;
+                Vec3 direction = rec.Normal + VRandom.UnitVec3();
+                Ray r = new Ray(rec.Point, direction);
+                return RayColor(r, world, depth - 1) * 0.5;
 
             }
 

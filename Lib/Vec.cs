@@ -1,6 +1,30 @@
-using Rays;
 namespace VecMath
 {
+    public static class VRandom
+    {
+        private static Random random = new Random();
+        public static Vec3 Vec3()
+        {
+            return new Vec3(random.Next() * random.NextDouble() - random.Next() * random.NextDouble(),
+                random.Next() * random.NextDouble() - random.Next() * random.NextDouble(),
+                random.Next() * random.NextDouble() - random.Next() * random.NextDouble());
+        }
+        public static Vec3 UnitVec3()
+        {
+            return VRandom.Vec3().UnitVec();
+        }
+
+        public static Vec3 Vec3(double min, double max)
+        {
+            var mm = max - min;
+            return new Vec3(
+              random.NextDouble() * mm + min,
+              random.NextDouble() * mm + min,
+              random.NextDouble() * mm + min);
+
+        }
+
+    }
     public struct Vec3
     {
         public double X
@@ -103,20 +127,6 @@ namespace VecMath
 
         }
 
-
-        // temporary function just to test things out
-        public double HitSphere(double radius, Ray ray)
-        {
-            Vec3 center = this - ray.Origin;
-            double a = ray.Direction.LengthSquared();
-            double h = Dot(ray.Direction, center);
-            double c = center.LengthSquared() - radius * radius;
-            double discriminant = h * h - a * c;
-            if (discriminant < 0)
-                return -1.0;
-            return (h - Math.Sqrt(discriminant)) / a;
-
-        }
         public static double Dot(Vec3 v, Vec3 u)
         {
             return v.X * u.X + v.Y * u.Y + v.Z * u.Z;
@@ -127,13 +137,30 @@ namespace VecMath
             return new Vec3(v.Y * u.Z - v.Z * u.Y, v.Z * u.X - v.X * u.Z, v.X * u.Y - v.Y * u.X);
         }
 
+        public Vec3 RandomUnitVector()
+        {
+            while (true)
+            {
+                Vec3 point = VRandom.Vec3(-1.0, 1.0);
+                double lenSquared = point.LengthSquared();
+                if (lenSquared <= 1 && lenSquared > 1e-160)
+                    return point / Math.Sqrt(lenSquared);
+            }
+        }
+
+        public static Vec3 RandomOnHemisphere(Vec3 normal)
+        {
+            Vec3 randomUnitVec = normal.RandomUnitVector();
+
+            if (Dot(randomUnitVec, normal) > 0.0)
+                return randomUnitVec;
+            else
+                return -randomUnitVec;
+        }
+
         public override string ToString()
         {
-
-            var sb = new System.Text.StringBuilder();
-            sb.AppendFormat("{0} {1} {2}", X, Y, Z);
-            return sb.ToString();
-
+            return $"{X} {Y} {Z}";
         }
     }
 }
