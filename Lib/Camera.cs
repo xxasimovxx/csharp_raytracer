@@ -16,7 +16,7 @@ namespace Raytracing
         public int SamplesPerPixel { get; set; } = 10;
         private Random random = new Random();
         private double PixelSampleScale { get; set; }
-        public int MaxDepth { get; set; } = 50;
+        public int MaxDepth { get; set; } = 10;
 
         public Camera()
         {
