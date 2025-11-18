@@ -170,6 +170,14 @@ namespace VecMath
             return v - n * Vec3.Dot(v, n) * 2.0;
         }
 
+        public static Vec3 Refract(Vec3 uv, Vec3 u, double EOE){
+          double CosTheta = double.Min(Vec3.Dot(-uv,u), 1.0);
+          Vec3 OutPerp = (uv + u * CosTheta) * EOE;
+          Vec3 OutPara = u * (-Math.Sqrt(Double.Abs(1.0 - OutPerp.LengthSquared())));
+          return OutPerp + OutPara;
+
+        }
+
         public override string ToString()
         {
             return $"{X} {Y} {Z}";
